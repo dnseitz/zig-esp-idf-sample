@@ -84,7 +84,7 @@ pub const soc_periph_rmt_clk_src_t = enum(c_uint) {
     RMT_CLK_SRC_APB = 4,
     RMT_CLK_SRC_RC_FAST = 8,
     RMT_CLK_SRC_XTAL = 10,
-    RMT_CLK_SRC_DEFAULT = 4,
+    pub const RMT_CLK_SRC_DEFAULT = @This().RMT_CLK_SRC_APB;
 };
 pub const soc_periph_rmt_clk_src_legacy_t = enum(c_uint) {
     RMT_BASECLK_APB = 4,
@@ -167,9 +167,10 @@ pub const rmt_rx_done_event_data_t = extern struct {
     flags: unnamed_5 = std.mem.zeroes(unnamed_5),
 };
 pub const rmt_rx_done_callback_t = ?*const fn (rmt_channel_handle_t, ?*const rmt_rx_done_event_data_t, ?*anyopaque) callconv(.C) bool; // /home/kassane/espressif/zig-esp-idf-sample/managed_components/espressif__led_strip/include/led_strip_rmt.h:33:18: warning: struct demoted to opaque type - has bitfield
-const unnamed_6 = opaque {};
+const unnamed_6 = extern struct { with_dma: bool = false };
 pub const led_strip_rmt_config_t = extern struct {
-    clk_src: rmt_clock_source_t = std.mem.zeroes(rmt_clock_source_t),
+    // clk_src: rmt_clock_source_t = std.mem.zeroes(rmt_clock_source_t),
+    clk_src: rmt_clock_source_t = rmt_clock_source_t.RMT_CLK_SRC_DEFAULT,
     resolution_hz: u32 = std.mem.zeroes(u32),
     mem_block_symbols: usize = std.mem.zeroes(usize),
     flags: unnamed_6 = std.mem.zeroes(unnamed_6),
